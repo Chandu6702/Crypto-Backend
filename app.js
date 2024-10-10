@@ -8,7 +8,7 @@ import cryptoRoutes from "./routes/cryptoRoutes.js";
 config();
 
 const app = express();
-const port = 8080;
+const port = 3000;
 connectDB();
 
 app.use(json());
