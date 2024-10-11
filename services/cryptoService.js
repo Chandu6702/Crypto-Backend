@@ -6,17 +6,14 @@ config();
 
 async function fetchCryptoData() {
   try {
-    const response = await axios.get(
-      "https://api.coingecko.com/api/v3/simple/price",
-      {
-        params: {
-          ids: "bitcoin,matic-network,ethereum",
-          vs_currencies: "usd",
-          include_market_cap: true,
-          include_24hr_change: true,
-        },
-      }
-    );
+    const response = await axios.get(process.env.COINGECKO_API_URL, {
+      params: {
+        ids: "bitcoin,matic-network,ethereum",
+        vs_currencies: "usd",
+        include_market_cap: true,
+        include_24hr_change: true,
+      },
+    });
 
     //de-structuring the fetched data
     const { bitcoin, "matic-network": matic, ethereum } = response.data;
