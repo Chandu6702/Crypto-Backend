@@ -26,15 +26,24 @@ router.get("/stats", async (req, res) => {
 router.get("/deviation", async (req, res) => {
   const { coin } = req.query;
   try {
-    const records = await CryptoData.find({ coinId: coin })
-      .sort({ createdAt: -1 })
-      .limit(100);
-    if (records.length < 2) {
+    const record = await CryptoData.findOne({ coinId: coin }).sort({
+      createdAt: -1,
+    });
+
+    if (!record) {
       return res
         .status(400)
         .json({ error: "Not enough data points to calculate deviation" });
     }
-    const prices = records.map((record) => record.price);
+
+    const prices = record.history.map((item) => item.price);
+
+    if (prices.length < 2) {
+      return res
+        .status(400)
+        .json({ error: "No prices found in the history for the given record" });
+    }
+
     const { mean, stdDev } = calculateDeviation(prices);
     res.json({ mean, stdDev });
   } catch (error) {
