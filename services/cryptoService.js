@@ -18,8 +18,7 @@ async function fetchCryptoData() {
       }
     );
 
-    console.log("Fetched Data:", response.data);
-
+    //de-structuring the fetched data
     const { bitcoin, "matic-network": matic, ethereum } = response.data;
     const cryptoRecords = [
       {
@@ -79,7 +78,6 @@ async function fetchCryptoData() {
               updateData,
               { upsert: true }
             );
-
             console.log(`Updated record for ${record.coinId}:`, result);
           } else {
             console.log(`No price change for ${record.coinId}.`);

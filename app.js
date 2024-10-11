@@ -21,6 +21,6 @@ schedule("0 */2 * * *", () => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`); // Use backticks for interpolation
+  console.log(`Server running on port ${port}`);
   fetchCryptoData(); // Initial fetch when the server starts
 });

@@ -3,6 +3,7 @@ import CryptoData from "../models/cryptoData.js";
 
 const router = Router();
 
+//route to get status of crypto
 router.get("/stats", async (req, res) => {
   const { coin } = req.query;
   try {
@@ -21,10 +22,11 @@ router.get("/stats", async (req, res) => {
   }
 });
 
+//route to get deviation of crypto
 router.get("/deviation", async (req, res) => {
   const { coin } = req.query;
   try {
-    const records = await CryptoData.find({ coinId: coin }) // Use the model to call find
+    const records = await CryptoData.find({ coinId: coin })
       .sort({ createdAt: -1 })
       .limit(100);
     if (records.length < 2) {
@@ -32,7 +34,6 @@ router.get("/deviation", async (req, res) => {
         .status(400)
         .json({ error: "Not enough data points to calculate deviation" });
     }
-
     const prices = records.map((record) => record.price);
     const { mean, stdDev } = calculateDeviation(prices);
     res.json({ mean, stdDev });
@@ -42,6 +43,7 @@ router.get("/deviation", async (req, res) => {
   }
 });
 
+//To calculate the deviation of prices
 function calculateDeviation(prices) {
   const mean = prices.reduce((sum, price) => sum + price, 0) / prices.length;
   const deviations = prices.map((price) => Math.pow(price - mean, 2));
