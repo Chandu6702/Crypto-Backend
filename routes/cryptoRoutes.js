@@ -31,9 +31,7 @@ router.get("/deviation", async (req, res) => {
     });
 
     if (!record) {
-      return res
-        .status(400)
-        .json({ error: "Not enough data points to calculate deviation" });
+      return res.status(400).json({ error: "No record found" });
     }
 
     const prices = record.history.map((item) => item.price);
@@ -41,7 +39,7 @@ router.get("/deviation", async (req, res) => {
     if (prices.length < 2) {
       return res
         .status(400)
-        .json({ error: "No prices found in the history for the given record" });
+        .json({ error: "Not enough data points to calculate deviation" });
     }
 
     const { mean, stdDev } = calculateDeviation(prices);
